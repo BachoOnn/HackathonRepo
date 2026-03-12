@@ -12,7 +12,7 @@ extension LoginView {
     var logoSection: some View {
         Image("tbc")
             .resizable()
-            .frame(width: 100, height: 100)
+            .frame(width: 110, height: 100)
     }
     
     var inputsSection: some View {
