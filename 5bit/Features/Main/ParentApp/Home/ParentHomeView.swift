@@ -15,7 +15,7 @@ struct ParentHomeView: View {
             VStack(spacing: 16) {
                 headerSection
                 cardSection
-                jibeSection
+                WishySection
                 loyaltySection
                 Spacer()
             }

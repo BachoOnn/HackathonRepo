@@ -78,7 +78,7 @@ extension ParentHomeView {
         .padding(.top, 20)
     }
     
-    var jibeSection: some View {
+    var WishySection: some View {
         SectionCard {
             HStack(spacing: 14) {
                 ZStack {
@@ -86,13 +86,13 @@ extension ParentHomeView {
                         .fill(Color(.systemGray5))
                         .frame(width: 64, height: 64)
                     
-                    Image("jibe")
+                    Image("Wishy")
                         .resizable()
                         .frame(width: 50, height: 50)
                 }
                 
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Jibe")
+                    Text("Wishy")
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(.primary)
                     
