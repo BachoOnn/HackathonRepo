@@ -8,6 +8,5 @@
 import SwiftUI
 
 enum AppRoute: Hashable {
-    case parentWishy
-    //kidsWishy
+    case parentWishy, kidsWishy
 }

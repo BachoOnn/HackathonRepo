@@ -40,8 +40,8 @@ struct MissionCard: View {
                     HStack(spacing: 4) {
                         Image("coin")
                             .resizable()
-                            .frame(width: 14, height: 14)
-                        Text("\(task.reward)₾")
+                            .frame(width: 16, height: 16)
+                        Text("\(task.reward)")
                             .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(Color(.systemYellow))
                     }

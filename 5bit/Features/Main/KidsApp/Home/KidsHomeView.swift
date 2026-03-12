@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct KidsHomeView: View {
+    
+    @StateObject var viewModel: KidsHomeViewModel
+    
     var body: some View {
         ZStack {
             TBCBackground()
@@ -30,5 +33,5 @@ struct KidsHomeView: View {
 }
 
 #Preview {
-    KidsHomeView()
+    KidsHomeView(viewModel: KidsHomeViewModel(coordinator: AppCoordinator()))
 }

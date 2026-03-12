@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension WishyView {
+extension ParentsWishyView {
     
     var headerSection: some View {
         HStack {

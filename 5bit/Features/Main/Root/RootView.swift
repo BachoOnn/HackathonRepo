@@ -25,7 +25,11 @@ struct RootView: View {
                 }
             case .kid:
                 NavigationStack(path: $coordinator.path) {
-                    Text("Kid Flow")
+                    KidsHomeView(viewModel: KidsHomeViewModel(coordinator: coordinator))
+                        .navigationBarHidden(true)
+                        .navigationDestination(for: AppRoute.self) { route in
+                            destination(for: route)
+                        }
                 }
             }
         }
@@ -35,7 +39,9 @@ struct RootView: View {
     private func destination(for route: AppRoute) -> some View {
         switch route {
         case .parentWishy:
-            WishyView(viewModel: WishyViewModel(coordinator: coordinator))
+            ParentsWishyView(viewModel: ParentWishyViewModel(coordinator: coordinator))
+        case .kidsWishy:
+            KidsWishyView(viewModel: KidsWishyViewModel())
         }
     }
 }

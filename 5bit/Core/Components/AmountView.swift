@@ -14,8 +14,9 @@ struct AmountView: View {
         HStack(alignment: .firstTextBaseline, spacing: 3) {
             Text(amount)
                 .font(.system(size: 18, weight: .semibold))
-            Text("₾")
-                .font(.system(size: 14, weight: .medium))
+            Image("coin")
+                .resizable()
+                .frame(width: 12, height: 12)
         }
     }
 }

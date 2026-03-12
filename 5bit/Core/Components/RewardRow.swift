@@ -34,9 +34,15 @@ struct RewardRow: View {
             
             Spacer()
             
-            Text("+\(task.reward)₾")
-                .font(.system(size: 15, weight: .bold))
-                .foregroundStyle(Color(.systemGreen))
+            HStack(spacing: 3) {
+                Text("+\(task.reward)")
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundStyle(Color(.systemGreen))
+                
+                Image("coin")
+                    .resizable()
+                    .frame(width: 16, height: 16)
+            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)

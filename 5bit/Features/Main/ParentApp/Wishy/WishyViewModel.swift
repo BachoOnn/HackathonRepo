@@ -7,7 +7,7 @@
 
 import Combine
 
-final class WishyViewModel: ObservableObject {
+final class ParentWishyViewModel: ObservableObject {
     @Published var selectedTab: WishyTab = .progress
     @Published var selectedKid: KidProfile = KidProfile.mock[0]
     

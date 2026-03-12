@@ -36,7 +36,7 @@ final class LoginViewModel: ObservableObject {
         
         errorMessage = nil
         // TODO: get role from API response
-        coordinator.login(as: .parent)
+        coordinator.login(as: .kid)
     }
     
     func clearError() {

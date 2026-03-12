@@ -174,7 +174,7 @@ extension KidsHomeView {
                         Image(systemName: "bolt.fill")
                             .font(.system(size: 10, weight: .bold))
                             .foregroundStyle(Color(.systemBlue))
-                        Text("33₾ total rewards")
+                        Text("total rewards: 33")
                             .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(Color(.systemBlue))
                     }
@@ -190,7 +190,7 @@ extension KidsHomeView {
                     .foregroundStyle(Color(.systemGray))
             }
         }
-        // TODO: .onTapGesture { viewModel.navigateToWishy() }
+        .onTapGesture { viewModel.navigateToWishy() }
     }
     
     var achievementsSection: some View {
