@@ -9,7 +9,6 @@ import SwiftUI
 
 extension WishyView {
     
-    // MARK: - Header
     var headerSection: some View {
         HStack {
 
@@ -23,7 +22,7 @@ extension WishyView {
             Spacer()
             
             Button {
-                // TODO: task add modal page
+                showAddTask = true
             } label: {
                 HStack(spacing: 6) {
                     Image(systemName: "plus")

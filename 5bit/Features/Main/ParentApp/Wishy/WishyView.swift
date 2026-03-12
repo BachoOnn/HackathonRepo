@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WishyView: View {
     @StateObject var viewModel = WishyViewModel()
+    @State var showAddTask = false
     
     var body: some View {
         ZStack {
@@ -26,6 +27,12 @@ struct WishyView: View {
                 }
             }
             .padding(.top, 10)
+        }
+        .sheet(isPresented: $showAddTask) {
+            AddTaskView()
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(24)
         }
     }
 }
