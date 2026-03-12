@@ -16,14 +16,15 @@ extension AddTaskView {
             } label: {
                 Image(systemName: "xmark")
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
             }
             
             Spacer()
             
             Text("New Task")
                 .font(.system(size: 18, weight: .bold))
-                .foregroundStyle(.white)
+                .foregroundStyle(.primary)
+                .padding(.leading, 40)
             
             Spacer()
             
@@ -111,9 +112,7 @@ extension AddTaskView {
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.center)
                             .tint(Color(.systemBlue))
-                            .frame(minWidth: 60)
                             .onChange(of: viewModel.rewardInput) { _, newValue in
-                                // strip non-digits and leading zeros
                                 let filtered = newValue.filter(\.isNumber)
                                 let trimmed = filtered.isEmpty ? "" : String(Int(filtered) ?? 0)
                                 if trimmed != newValue { viewModel.rewardInput = trimmed }
