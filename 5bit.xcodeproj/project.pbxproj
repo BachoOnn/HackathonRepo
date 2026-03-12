@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		9D08BBF02F62CFCC00861D2D /* 5bit */ = {
+		9DBF7A892F62D0CA00C997FD /* 5bit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = 5bit;
 			sourceTree = "<group>";
@@ -32,7 +32,7 @@
 		9D08BBE52F62CFCC00861D2D = {
 			isa = PBXGroup;
 			children = (
-				9D08BBF02F62CFCC00861D2D /* 5bit */,
+				9DBF7A892F62D0CA00C997FD /* 5bit */,
 				9D08BBEF2F62CFCC00861D2D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,7 +61,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				9D08BBF02F62CFCC00861D2D /* 5bit */,
+				9DBF7A892F62D0CA00C997FD /* 5bit */,
 			);
 			name = 5bit;
 			packageProductDependencies = (
