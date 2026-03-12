@@ -24,7 +24,7 @@ extension LoginView {
             loginButton
         }
         .padding(20)
-        .background(Color.white)
+        .background(Color.lightDark)
         .cornerRadius(20)
         .padding(.horizontal, 24)
     }
@@ -129,7 +129,7 @@ extension LoginView {
         } label: {
             Text("Login")
                 .fontWeight(.semibold)
-                .foregroundColor(.white)
+                .foregroundColor(.lightDark)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.tbc)
