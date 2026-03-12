@@ -29,6 +29,3 @@ struct LoginView: View {
     }
 }
 
-#Preview {
-    LoginView(viewModel: LoginViewModel())
-}

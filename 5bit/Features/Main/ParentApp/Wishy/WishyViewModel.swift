@@ -14,6 +14,12 @@ final class WishyViewModel: ObservableObject {
     let kids: [KidProfile] = KidProfile.mock
     let tasks: [WishyTask] = WishyTask.mock
     
+    private let coordinator: AppCoordinator
+    
+    init(coordinator: AppCoordinator) {
+        self.coordinator = coordinator
+    }
+    
     var filteredTasks: [WishyTask] {
         tasks.filter { $0.kidId == selectedKid.id && $0.tab == selectedTab }
     }
@@ -25,5 +31,9 @@ final class WishyViewModel: ObservableObject {
     func selectKid(_ kid: KidProfile) {
         selectedKid = kid
         selectedTab = .progress
+    }
+    
+    func navigateBack() {
+        coordinator.pop()
     }
 }

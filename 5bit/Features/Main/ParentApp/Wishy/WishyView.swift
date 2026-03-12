@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct WishyView: View {
-    @StateObject var viewModel = WishyViewModel()
+    @StateObject var viewModel: WishyViewModel
     @State var showAddTask = false
     
     var body: some View {
@@ -38,5 +38,5 @@ struct WishyView: View {
 }
 
 #Preview {
-    WishyView()
+    WishyView(viewModel: WishyViewModel(coordinator: AppCoordinator()))
 }

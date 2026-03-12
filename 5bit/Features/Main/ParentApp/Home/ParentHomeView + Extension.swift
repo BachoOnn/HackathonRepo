@@ -116,7 +116,14 @@ extension ParentHomeView {
                 }
                 
                 Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Color(.systemGray))
             }
+        }
+        .onTapGesture {
+            viewModel.navigateToWishy()
         }
     }
     

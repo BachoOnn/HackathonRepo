@@ -11,7 +11,7 @@ import SwiftUI
 struct FiveBitApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginView(viewModel: LoginViewModel())
+            RootView()
         }
     }
 }

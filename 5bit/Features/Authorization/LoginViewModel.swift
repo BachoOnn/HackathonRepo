@@ -14,6 +14,12 @@ final class LoginViewModel: ObservableObject {
     @Published var isPasswordVisible: Bool = false
     @Published var errorMessage: String? = nil
     
+    private let coordinator: AppCoordinator
+    
+    init(coordinator: AppCoordinator) {
+        self.coordinator = coordinator
+    }
+    
     func login() {
         guard !email.trimmingCharacters(in: .whitespaces).isEmpty else {
             errorMessage = "Email is required."
@@ -29,7 +35,8 @@ final class LoginViewModel: ObservableObject {
         }
         
         errorMessage = nil
-        // TODO: actual login call
+        // TODO: get role from API response
+        coordinator.login(as: .parent)
     }
     
     func clearError() {
