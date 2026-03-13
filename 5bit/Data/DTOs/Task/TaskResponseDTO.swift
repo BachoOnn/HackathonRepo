@@ -5,7 +5,6 @@
 //  Created by Bacho on 13.03.26.
 //
 
-
 struct TaskResponseDTO: Codable {
     let id: Int
     let title: String?

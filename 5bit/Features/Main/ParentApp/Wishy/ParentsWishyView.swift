@@ -38,7 +38,19 @@ struct ParentsWishyView: View {
             .presentationDragIndicator(.visible)
             .presentationCornerRadius(24)
         }
+        .sheet(isPresented: $viewModel.showSetPriceSheet) {
+            SetWishPriceView(viewModel: viewModel)
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(24)
+        }
+        
         .task { viewModel.onLoad() }
         .refreshable { viewModel.onLoad() }
+        .alert("Error", isPresented: .constant(viewModel.errorMessage != nil)) {
+            Button("OK") { viewModel.errorMessage = nil }
+        } message: {
+            Text(viewModel.errorMessage ?? "")
+        }
     }
 }

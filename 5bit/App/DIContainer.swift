@@ -34,6 +34,12 @@ final class DIContainer {
     lazy var createWishUseCase: CreateWishUseCase = DefaultCreateWishUseCase(kidRepository: kidRepository)
     lazy var approveTaskUseCase: ApproveTaskUseCase = DefaultApproveTaskUseCase(taskRepository: taskRepository)
     lazy var convertCoinsUseCase: ConvertCoinsUseCase = DefaultConvertCoinsUseCase(kidRepository: kidRepository)
+    lazy var getPendingWishesUseCase: GetPendingWishesUseCase = DefaultGetPendingWishesUseCase(taskRepository: taskRepository)
+    lazy var setWishPriceUseCase: SetWishPriceUseCase = DefaultSetWishPriceUseCase(taskRepository: taskRepository)
+    lazy var getKidWishesUseCase: GetKidWishesUseCase = DefaultGetKidWishesUseCase(kidRepository: kidRepository)
+    lazy var redeemWishUseCase: RedeemWishUseCase = DefaultRedeemWishUseCase(kidRepository: kidRepository)
+    
+
     
     // MARK: - ViewModels
     func makeLoginViewModel(coordinator: AppCoordinator) -> LoginViewModel {
@@ -50,7 +56,10 @@ final class DIContainer {
             coordinator: coordinator,
             getParentAssignmentsUseCase: getParentAssignmentsUseCase,
             getBalanceUseCase: getChildBalanceUseCase,
-            approveTaskUseCase: approveTaskUseCase
+            approveTaskUseCase: approveTaskUseCase,
+            getPendingWishesUseCase: getPendingWishesUseCase,
+            setWishPriceUseCase: setWishPriceUseCase,
+            getKidWishesUseCase: getKidWishesUseCase
         )
     }
     
@@ -75,7 +84,9 @@ final class DIContainer {
             coordinator: coordinator,
             getKidDataUseCase: getKidDataUseCase,
             acceptTaskUseCase: acceptTaskUseCase,
-            completeTaskUseCase: completeTaskUseCase
+            completeTaskUseCase: completeTaskUseCase,
+            getKidWishesUseCase: getKidWishesUseCase,
+            redeemWishUseCase: redeemWishUseCase
         )
     }
     

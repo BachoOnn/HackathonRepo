@@ -11,13 +11,11 @@ extension KidsWishyView {
     
     var headerSection: some View {
         HStack {
-                        
             Image("Wishy")
                 .resizable()
                 .frame(width: 28, height: 28)
             Text("Wishy")
                 .font(.system(size: 18, weight: .bold))
-            
         }
     }
     
@@ -47,22 +45,21 @@ extension KidsWishyView {
         }
     }
     
-    var completedSection: some View {
+    var wishesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionLabel(title: "COMPLETED")
+            sectionLabel(title: "MY WISHES ⭐️")
             
-            if viewModel.completedMissions.isEmpty {
-                Text("No completed tasks yet")
+            if viewModel.kidWishes.isEmpty {
+                Text("No wishes yet — send one!")
                     .font(.system(size: 14))
                     .foregroundStyle(Color(.systemGray))
                     .padding(.horizontal, 16)
             } else {
-                VStack(spacing: 1) {
-                    ForEach(viewModel.completedMissions) { assignment in
-                        KidCompletedRow(assignment: assignment)
+                VStack(spacing: 10) {
+                    ForEach(viewModel.kidWishes) { wish in
+                        WishCard(wish: wish, onRedeem: { viewModel.redeemWish(wish) })
                     }
                 }
-                .background(RoundedRectangle(cornerRadius: 18).fill(Color(.systemGray6)))
                 .padding(.horizontal, 16)
             }
         }
@@ -94,6 +91,27 @@ extension KidsWishyView {
             )
         }
         .padding(.horizontal, 16)
+    }
+    
+    var completedSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            sectionLabel(title: "COMPLETED")
+            
+            if viewModel.completedMissions.isEmpty {
+                Text("No completed tasks yet")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color(.systemGray))
+                    .padding(.horizontal, 16)
+            } else {
+                VStack(spacing: 1) {
+                    ForEach(viewModel.completedMissions) { assignment in
+                        KidCompletedRow(assignment: assignment)
+                    }
+                }
+                .background(RoundedRectangle(cornerRadius: 18).fill(Color(.systemGray6)))
+                .padding(.horizontal, 16)
+            }
+        }
     }
     
     private func sectionLabel(title: String) -> some View {

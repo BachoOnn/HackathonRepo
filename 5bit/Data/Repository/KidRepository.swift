@@ -93,6 +93,14 @@ final class KidRepository: KidRepositoryProtocol {
         )
         return KidBalance(coins: dto.coinBalance, money: dto.moneyBalance)
     }
+    
+    func redeemWish(wishId: Int, childId: Int) async throws -> Wish {
+        let dto: WishResponseDTO = try await network.post(
+            urlString: baseURL + "/wishes/redeem",
+            body: RedeemWishRequestDTO(wishId: wishId, childId: childId)
+        )
+        return dto.toDomain()
+    }
 }
 
 extension WishResponseDTO {

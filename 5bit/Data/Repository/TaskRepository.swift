@@ -34,14 +34,6 @@ final class TaskRepository: TaskRepositoryProtocol {
         )
         return dtos.map { $0.toDomain() }
     }
-
-    func approveTask(assignmentId: Int, parentId: Int) async throws {
-        struct ApproveRequest: Codable { let assignmentId: Int; let parentId: Int }
-        let _: AssignmentResponseDTO = try await network.post(
-            urlString: baseURL + "/tasks/approve",
-            body: ApproveRequest(assignmentId: assignmentId, parentId: parentId)
-        )
-    }
     
     func getChildBalance(childId: Int) async throws -> Int {
         struct BalanceResponse: Codable { let coinBalance: Int; let moneyBalance: Double }
@@ -130,5 +122,23 @@ final class TaskRepository: TaskRepositoryProtocol {
             urlString: baseURL + "/tasks/approve",
             body: ApproveRequest(assignmentId: assignmentId, parentId: parentId)
         )
+    }
+    
+    func getPendingWishes(parentId: Int) async throws -> [Wish] {
+        do {
+            let dtos: [WishResponseDTO] = try await network.get(
+                urlString: baseURL + "/wishes/pending/\(parentId)"
+            )
+            return dtos.map { $0.toDomain() }
+        } catch {
+            return []
+        }
+    }
+    func setWishPrice(wishId: Int, coinPrice: Int, parentId: Int) async throws -> Wish {
+        let dto: WishResponseDTO = try await network.post(
+            urlString: baseURL + "/wishes/price",
+            body: SetWishPriceRequestDTO(wishId: wishId, price: coinPrice, parentId: parentId)
+        )
+        return dto.toDomain()
     }
 }

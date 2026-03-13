@@ -2,6 +2,8 @@
 //  WishyViewModel.swift
 //  5bit
 //
+//  Created by Bacho on 12.03.26.
+//
 
 import Combine
 import Foundation
@@ -15,29 +17,66 @@ final class ParentWishyViewModel: ObservableObject {
     @Published var assignments: [Assignment] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
+    @Published var pendingWishes: [Wish] = []
+    @Published var selectedWish: Wish? = nil
+    @Published var showSetPriceSheet: Bool = false
+    @Published var wishPriceInput: String = ""
     
     weak var coordinator: AppCoordinator?
     private let getAssignmentsUseCase: GetParentAssignmentsUseCase
     private let getBalanceUseCase: GetChildBalanceUseCase
     private let approveTaskUseCase: ApproveTaskUseCase
+    private let getPendingWishesUseCase: GetPendingWishesUseCase
+    private let setWishPriceUseCase: SetWishPriceUseCase
+    private let getKidWishesUseCase: GetKidWishesUseCase
     
     init(
         coordinator: AppCoordinator,
         getParentAssignmentsUseCase: GetParentAssignmentsUseCase,
         getBalanceUseCase: GetChildBalanceUseCase,
-        approveTaskUseCase: ApproveTaskUseCase
+        approveTaskUseCase: ApproveTaskUseCase,
+        getPendingWishesUseCase: GetPendingWishesUseCase,
+        setWishPriceUseCase: SetWishPriceUseCase,
+        getKidWishesUseCase: GetKidWishesUseCase
     ) {
         self.coordinator = coordinator
         self.getAssignmentsUseCase = getParentAssignmentsUseCase
         self.getBalanceUseCase = getBalanceUseCase
         self.approveTaskUseCase = approveTaskUseCase
+        self.getPendingWishesUseCase = getPendingWishesUseCase
+        self.setWishPriceUseCase = setWishPriceUseCase
+        self.getKidWishesUseCase = getKidWishesUseCase
     }
     
+    func openSetPriceForAssignment(_ assignment: Assignment) {
+        Task {
+            if let match = pendingWishes.first(where: { $0.title == assignment.taskTitle }) {
+                openSetPrice(for: match)
+                return
+            }
+            if let wishes = try? await getKidWishesUseCase.execute(childId: assignment.childId),
+               let match = wishes.first(where: { $0.title == assignment.taskTitle }) {
+                openSetPrice(for: match)
+            }
+        }
+    }
     var filteredAssignments: [Assignment] {
         assignments.filter {
             $0.childId == selectedKid.apiId &&
             effectiveTab($0) == selectedTab
         }
+    }
+    var wishPriceInt: Int { Int(wishPriceInput) ?? 0 }
+    var isWishPriceValid: Bool { wishPriceInt > 0 }
+    
+    func openSetPrice(for wish: Wish) {
+        selectedWish = wish
+        wishPriceInput = ""
+        showSetPriceSheet = true
+    }
+    
+    func submitWishPrice() {
+        Task { await performSetPrice() }
     }
     
     func taskCount(for tab: WishyTab) -> Int {
@@ -80,6 +119,9 @@ fileprivate extension ParentWishyViewModel {
         } catch {
             errorMessage = error.localizedDescription
         }
+        
+        pendingWishes = (try? await getPendingWishesUseCase.execute(parentId: parentId)) ?? []
+        
         isLoading = false
     }
     
@@ -114,8 +156,14 @@ fileprivate extension ParentWishyViewModel {
                 progress: total > 0 ? Double(completed) / Double(total) : 0
             ))
         }
+        
         kids = derived
-        if let first = derived.first { selectedKid = first }
+        
+        if let currentlySelected = derived.first(where: { $0.apiId == selectedKid.apiId }) {
+            selectedKid = currentlySelected
+        } else if let first = derived.first {
+            selectedKid = first
+        }
     }
     
     func fallbackName(for id: Int) -> String {
@@ -133,6 +181,29 @@ fileprivate extension ParentWishyViewModel {
         case 3: return "🧒🏽"
         case 4: return "👦🏻"
         default: return "🧒"
+        }
+    }
+    
+    func performSetPrice() async {
+        guard let wish = selectedWish,
+              let parentId = coordinator?.currentUser?.userId,
+              isWishPriceValid else {
+            print("❌ guard failed — wish: \(selectedWish?.id ?? -1), parentId: \(coordinator?.currentUser?.userId ?? -1), valid: \(isWishPriceValid)")
+            return
+        }
+        print("✅ submitting — wishId: \(wish.id), coinPrice: \(wishPriceInt), parentId: \(parentId)")
+        do {
+            try await setWishPriceUseCase.execute(
+                wishId: wish.id,
+                coinPrice: wishPriceInt,
+                parentId: parentId
+            )
+            showSetPriceSheet = false
+            selectedWish = nil
+            await fetchAssignments()
+        } catch {
+            print("❌ setWishPrice failed: \(error)")
+            errorMessage = error.localizedDescription
         }
     }
 }

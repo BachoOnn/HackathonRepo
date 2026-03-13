@@ -23,6 +23,7 @@ struct KidsWishyView: View {
                     VStack(spacing: 20) {
                         activeMissionsSection
                         askParentSection
+                        wishesSection
                         completedSection
                     }
                     .padding(.bottom, 32)

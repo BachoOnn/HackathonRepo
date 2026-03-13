@@ -5,7 +5,6 @@
 //  Created by Bacho on 13.03.26.
 //
 
-
 struct TransactionResponseDTO: Codable {
     let id: Int
     let childId: Int

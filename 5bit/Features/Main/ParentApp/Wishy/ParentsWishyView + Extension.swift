@@ -11,9 +11,8 @@ extension ParentsWishyView {
     
     var headerSection: some View {
         HStack {
-
             Spacer()
-            
+        
                 Text("Wishy")
                     .font(.system(size: 28, weight: .bold))
                     .foregroundStyle(.white)
@@ -160,9 +159,10 @@ extension ParentsWishyView {
     private var requestsTabContent: some View {
         let parentTasks = viewModel.filteredAssignments.filter { $0.status == .notStarted }
         let kidWishes   = viewModel.filteredAssignments.filter { $0.status == .wishRequest }
+        let priceable   = viewModel.pendingWishes  // ← from /wishes/pending/{parentId}
         
         return VStack(alignment: .leading, spacing: 16) {
-            if parentTasks.isEmpty && kidWishes.isEmpty {
+            if parentTasks.isEmpty && kidWishes.isEmpty && priceable.isEmpty {
                 Text("No requests")
                     .font(.system(size: 14))
                     .foregroundStyle(Color(.systemGray))
@@ -187,11 +187,31 @@ extension ParentsWishyView {
             
             if !kidWishes.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    subsectionLabel("REQUESTED BY KID ⭐️")
+                    subsectionLabel("WISHES TO PRICE ⭐️")
                     VStack(spacing: 0) {
                         ForEach(kidWishes) { assignment in
-                            AssignmentRow(assignment: assignment)
+                            Button {
+                                viewModel.openSetPriceForAssignment(assignment)  // ← use this
+                            } label: {
+                                AssignmentRow(assignment: assignment)
+                            }
+                            .buttonStyle(.plain)
                             if assignment.id != kidWishes.last?.id {
+                                Divider().padding(.leading, 74)
+                            }
+                        }
+                    }
+                    .background(RoundedRectangle(cornerRadius: 16).fill(Color(.systemGray6)))
+                }
+            }
+            
+            if !priceable.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    subsectionLabel("WISHES TO PRICE ⭐️")
+                    VStack(spacing: 0) {
+                        ForEach(priceable) { wish in
+                            wishRow(wish)
+                            if wish.id != priceable.last?.id {
                                 Divider().padding(.leading, 74)
                             }
                         }
@@ -202,25 +222,67 @@ extension ParentsWishyView {
         }
     }
     
-    private var defaultTabContent: some View {
-        VStack(spacing: 0) {
-            if viewModel.filteredAssignments.isEmpty {
-                EmptyView()
-            } else {
-                ForEach(viewModel.filteredAssignments) { assignment in
-                    AssignmentRow(
-                        assignment: assignment,
-                        onApprove: viewModel.selectedTab == .review
-                        ? { viewModel.approveTask(assignment) }
-                        : nil
-                    )
-                    if assignment.id != viewModel.filteredAssignments.last?.id {
-                        Divider().padding(.leading, 74)
+    private func wishRow(_ wish: Wish) -> some View {
+        Button {
+            viewModel.openSetPrice(for: wish)
+        } label: {
+            HStack(spacing: 14) {
+                Text("⭐️")
+                    .font(.system(size: 20))
+                    .frame(width: 42, height: 42)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemGray5)))
+                
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(wish.title)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.primary)
+                    if let desc = wish.description, !desc.isEmpty {
+                        Text(desc)
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color(.systemGray))
+                            .lineLimit(1)
                     }
                 }
+                Spacer()
+                Text("Set Price")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.purple))
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+    
+    private var defaultTabContent: some View {
+        Group {
+            if viewModel.filteredAssignments.isEmpty {
+                Text("Nothing here")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color(.systemGray))
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, 20)
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(viewModel.filteredAssignments) { assignment in
+                        AssignmentRow(
+                            assignment: assignment,
+                            onApprove: viewModel.selectedTab == .review
+                            ? { viewModel.approveTask(assignment) }
+                            : nil
+                        )
+                        if assignment.id != viewModel.filteredAssignments.last?.id {
+                            Divider().padding(.leading, 74)
+                        }
+                    }
+                }
+                .background(RoundedRectangle(cornerRadius: 16).fill(Color(.systemGray6)))
             }
         }
-        .background(RoundedRectangle(cornerRadius: 16).fill(Color(.systemGray6)))
     }
     
     private func subsectionLabel(_ title: String) -> some View {
