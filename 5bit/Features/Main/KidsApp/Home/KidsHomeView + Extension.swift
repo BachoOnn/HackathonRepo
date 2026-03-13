@@ -38,11 +38,12 @@ extension KidsHomeView {
     }
     
     private var kidAvatar: some View {
-        ZStack(alignment: .bottomTrailing) {
-            Text("👧🏼")
+        let avatar = Avatar(name: viewModel.childName)
+        return ZStack(alignment: .bottomTrailing) {
+            Text(avatar.emoji)
                 .font(.system(size: 34))
                 .frame(width: 60, height: 60)
-                .background(Circle().fill(Color(.systemBlue)))
+                .background(Circle().fill(Color.tbc))
             
             Circle()
                 .fill(Color(.systemGreen))
@@ -209,7 +210,7 @@ extension KidsHomeView {
         }
     }
     
-    var pocketQuestSection: some View {
+    var missionSection: some View {
         SectionCard {
             HStack(spacing: 14) {
                 ZStack {
@@ -217,13 +218,13 @@ extension KidsHomeView {
                         .fill(Color(.systemGray5))
                         .frame(width: 64, height: 64)
                     
-                    Image("Wishy")
+                    Image("mission")
                         .resizable()
                         .frame(width: 50, height: 50)
                 }
                 
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Wishy")
+                    Text("MISSIONS")
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(.primary)
                     

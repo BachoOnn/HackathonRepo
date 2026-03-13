@@ -18,6 +18,7 @@ struct KidsWishyView: View {
 
             VStack(spacing: 0) {
                 headerSection
+                    .padding(.bottom, 20)
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 20) {
                         activeMissionsSection

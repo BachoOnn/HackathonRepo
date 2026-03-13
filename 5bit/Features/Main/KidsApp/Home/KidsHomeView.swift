@@ -19,7 +19,7 @@ struct KidsHomeView: View {
                     VStack(spacing: 20) {
                         cardSection
                         balanceCardSection
-                        pocketQuestSection
+                        missionSection
                         achievementsSection
                         recentRewardsSection
                     }
