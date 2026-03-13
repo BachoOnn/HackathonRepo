@@ -10,6 +10,7 @@ import SwiftUI
 struct KidsWishyView: View {
     
     @StateObject var viewModel: KidsWishyViewModel
+    @State var showRequestView = false
     
     var body: some View {
         ZStack {
@@ -28,6 +29,12 @@ struct KidsWishyView: View {
                 }
             }
             .padding(.top, 20)
+        }
+        .sheet(isPresented: $showRequestView) {
+            RequestView()
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(24)
         }
     }
 }

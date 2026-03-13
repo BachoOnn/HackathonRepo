@@ -35,7 +35,9 @@ extension KidsWishyView {
     }
     
     var askParentSection: some View {
-        Button { } label: {
+        Button {
+            showRequestView = true
+        } label: {
             HStack(spacing: 10) {
                 Image(systemName: "envelope.fill")
                     .font(.system(size: 16, weight: .semibold))
