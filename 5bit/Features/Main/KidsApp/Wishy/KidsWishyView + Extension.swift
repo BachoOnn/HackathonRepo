@@ -25,12 +25,46 @@ extension KidsWishyView {
         VStack(alignment: .leading, spacing: 12) {
             sectionLabel(title: "ACTIVE MISSIONS")
             
-            VStack(spacing: 12) {
-                ForEach(KidsRewardTask.mock.filter { !$0.isCompleted && !$0.isRecent }) { task in
-                    MissionCard(task: task)
+            if viewModel.isLoading {
+                ProgressView().padding(.top, 10).padding(.horizontal, 16)
+            } else if viewModel.activeMissions.isEmpty {
+                Text("No active missions yet")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color(.systemGray))
+                    .padding(.horizontal, 16)
+            } else {
+                VStack(spacing: 12) {
+                    ForEach(viewModel.activeMissions) { assignment in
+                        KidMissionCard(
+                            assignment: assignment,
+                            onAccept: { viewModel.acceptTask(assignment) },
+                            onComplete: { viewModel.completeTask(assignment) }
+                        )
+                    }
                 }
+                .padding(.horizontal, 16)
             }
-            .padding(.horizontal, 16)
+        }
+    }
+    
+    var completedSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            sectionLabel(title: "COMPLETED")
+            
+            if viewModel.completedMissions.isEmpty {
+                Text("No completed tasks yet")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color(.systemGray))
+                    .padding(.horizontal, 16)
+            } else {
+                VStack(spacing: 1) {
+                    ForEach(viewModel.completedMissions) { assignment in
+                        KidCompletedRow(assignment: assignment)
+                    }
+                }
+                .background(RoundedRectangle(cornerRadius: 18).fill(Color(.systemGray6)))
+                .padding(.horizontal, 16)
+            }
         }
     }
     
@@ -60,24 +94,6 @@ extension KidsWishyView {
             )
         }
         .padding(.horizontal, 16)
-    }
-    
-    var completedSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            sectionLabel(title: "COMPLETED")
-            
-            VStack(spacing: 1) {
-                ForEach(KidsRewardTask.mock.filter { $0.isCompleted }) { task in
-                    RewardRow(task: task)
-                }
-            }
-            .background(
-                RoundedRectangle(cornerRadius: 18)
-                    .fill(Color(.systemGray6))
-                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 2)
-            )
-            .padding(.horizontal, 16)
-        }
     }
     
     private func sectionLabel(title: String) -> some View {

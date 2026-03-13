@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct AddTaskView: View {
-    @StateObject var viewModel = AddTaskViewModel()
+    @StateObject var viewModel: AddTaskViewModel
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack {
             TBCBackground()
-            
             VStack(spacing: 0) {
                 headerSection
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 24) {
+                        kidPickerSection
                         taskPickerSection
                         rewardSection
                         descriptionSection
@@ -29,9 +29,8 @@ struct AddTaskView: View {
                 }
             }
         }
+        .onChange(of: viewModel.didSubmitSuccessfully) { _, success in
+            if success { dismiss() }
+        }
     }
-}
-
-#Preview {
-    AddTaskView()
 }

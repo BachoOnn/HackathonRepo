@@ -43,11 +43,7 @@ struct RootView: View {
         case .parentWishy:
             ParentsWishyView(viewModel: di.makeParentWishyViewModel(coordinator: coordinator))
         case .kidsWishy:
-            KidsWishyView(viewModel: di.makeKidsWishyViewModel())
+            KidsWishyView(viewModel: di.makeKidsWishyViewModel(coordinator: coordinator))
         }
     }
-}
-
-#Preview {
-    RootView()
 }

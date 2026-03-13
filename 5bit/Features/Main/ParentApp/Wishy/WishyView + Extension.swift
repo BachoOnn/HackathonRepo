@@ -82,7 +82,7 @@ extension ParentsWishyView {
                     Text(kid.name)
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(.primary)
-                    Text("TBC Kids")
+                    Text("\(kid.completedTasks) tasks completed")
                         .font(.system(size: 13))
                         .foregroundStyle(Color(.systemGray))
                 }
@@ -109,7 +109,7 @@ extension ParentsWishyView {
                     .foregroundStyle(Color(.systemBlue))
             }
             
-            ProgressView(value: kid.progress)
+            ProgressView(value: max(0, min(kid.progress, 1)))
                 .tint(Color(.systemBlue))
                 .scaleEffect(x: 1, y: 1.4)
         }
@@ -146,10 +146,87 @@ extension ParentsWishyView {
     
     var taskListSection: some View {
         VStack(spacing: 10) {
-            ForEach(viewModel.filteredTasks) { task in
-                WishyTaskRow(task: task)
+            if viewModel.isLoading {
+                ProgressView().padding(.top, 20)
+            } else if viewModel.selectedTab == .requests {
+                requestsTabContent
+            } else {
+                defaultTabContent
             }
         }
         .padding(.horizontal, 16)
+    }
+    
+    private var requestsTabContent: some View {
+        let parentTasks = viewModel.filteredAssignments.filter { $0.status == .notStarted }
+        let kidWishes   = viewModel.filteredAssignments.filter { $0.status == .wishRequest }
+        
+        return VStack(alignment: .leading, spacing: 16) {
+            if parentTasks.isEmpty && kidWishes.isEmpty {
+                Text("No requests")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color(.systemGray))
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, 20)
+            }
+            
+            if !parentTasks.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    subsectionLabel("ASSIGNED BY YOU")
+                    VStack(spacing: 0) {
+                        ForEach(parentTasks) { assignment in
+                            AssignmentRow(assignment: assignment)
+                            if assignment.id != parentTasks.last?.id {
+                                Divider().padding(.leading, 74)
+                            }
+                        }
+                    }
+                    .background(RoundedRectangle(cornerRadius: 16).fill(Color(.systemGray6)))
+                }
+            }
+            
+            if !kidWishes.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    subsectionLabel("REQUESTED BY KID ⭐️")
+                    VStack(spacing: 0) {
+                        ForEach(kidWishes) { assignment in
+                            AssignmentRow(assignment: assignment)
+                            if assignment.id != kidWishes.last?.id {
+                                Divider().padding(.leading, 74)
+                            }
+                        }
+                    }
+                    .background(RoundedRectangle(cornerRadius: 16).fill(Color(.systemGray6)))
+                }
+            }
+        }
+    }
+    
+    private var defaultTabContent: some View {
+        VStack(spacing: 0) {
+            if viewModel.filteredAssignments.isEmpty {
+                EmptyView()
+            } else {
+                ForEach(viewModel.filteredAssignments) { assignment in
+                    AssignmentRow(
+                        assignment: assignment,
+                        onApprove: viewModel.selectedTab == .review
+                        ? { viewModel.approveTask(assignment) }
+                        : nil
+                    )
+                    if assignment.id != viewModel.filteredAssignments.last?.id {
+                        Divider().padding(.leading, 74)
+                    }
+                }
+            }
+        }
+        .background(RoundedRectangle(cornerRadius: 16).fill(Color(.systemGray6)))
+    }
+    
+    private func subsectionLabel(_ title: String) -> some View {
+        Text(title)
+            .font(.system(size: 11, weight: .heavy))
+            .foregroundStyle(Color(.systemGray))
+            .tracking(1.0)
     }
 }

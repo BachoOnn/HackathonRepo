@@ -11,5 +11,5 @@ struct User {
     let userId: Int
     let name: String
     let role: UserRole
-    let parentId: Int?
+    let parentId: Int?  
 }

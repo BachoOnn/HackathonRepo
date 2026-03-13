@@ -22,7 +22,7 @@ extension KidsHomeView {
                     .foregroundStyle(Color(.systemGray))
                 
                 HStack(spacing: 8) {
-                    Text("Alex!")
+                    Text("\(viewModel.childName)!")
                         .font(.system(size: 26, weight: .bold))
                         .foregroundStyle(.primary)
                     Text("👋")
@@ -39,7 +39,7 @@ extension KidsHomeView {
     
     private var kidAvatar: some View {
         ZStack(alignment: .bottomTrailing) {
-            Text("🧒")
+            Text("👧🏼")
                 .font(.system(size: 34))
                 .frame(width: 60, height: 60)
                 .background(Circle().fill(Color(.systemBlue)))
@@ -49,6 +49,61 @@ extension KidsHomeView {
                 .frame(width: 14, height: 14)
                 .overlay(Circle().stroke(Color(.systemBackground), lineWidth: 2))
         }
+    }
+    
+    var cardSection: some View {
+        SectionCard {
+            VStack(alignment: .leading, spacing: 45) {
+                
+                HStack(alignment: .center) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Total Available")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(.primary)
+                        
+                        HStack(alignment: .firstTextBaseline, spacing: 6) {
+                            Text(String(format: "%.2f", viewModel.balance.money))
+                                .font(.system(size: 30, weight: .bold))
+                            Text("₾")
+                                .font(.system(size: 22, weight: .semibold))
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    HStack(spacing: 16) {
+                        Button { } label: {
+                            Image(systemName: "pencil")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(Color(.systemBlue))
+                        }
+                        Button { } label: {
+                            Image(systemName: "eye.slash")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(Color(.systemBlue))
+                        }
+                    }
+                }
+                
+                HStack(spacing: 16) {
+                    Image("card1")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Kid Card")
+                            .font(.system(size: 15, weight: .semibold))
+                        Text("MC GOLD")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color(.systemGray))
+                    }
+                    
+                    Spacer()
+                    AmountView(amount: "\(viewModel.balance.money)")
+                }
+            }
+        }
+        .padding(.top, 20)
     }
     
     var balanceCardSection: some View {
@@ -66,7 +121,7 @@ extension KidsHomeView {
                     }
                     
                     HStack(alignment: .center, spacing: 14) {
-                        Text("47.50")
+                        Text("\(viewModel.balance.coins)")
                             .font(.system(size: 35, weight: .bold))
                             .foregroundStyle(.white)
                         Image("coin")
@@ -79,18 +134,18 @@ extension KidsHomeView {
                 
                 VStack(alignment: .trailing, spacing: 6) {
                     HStack(spacing: 6) {
-                        Text("Level 3")
+                        Text("Level \(viewModel.level)")
                             .font(.system(size: 16, weight: .bold))
                             .foregroundStyle(.white)
                         Text("🏆")
                             .font(.system(size: 16))
                     }
-                    starRating(current: 3, total: 5)
+                    starRating(current: viewModel.level, total: 5)
                 }
             }
             
             VStack(alignment: .leading, spacing: 8) {
-                ProgressView(value: 340, total: 500)
+                ProgressView(value: viewModel.xpProgress)
                     .tint(
                         LinearGradient(
                             colors: [Color(.systemGreen), Color(.systemTeal)],
@@ -105,14 +160,20 @@ extension KidsHomeView {
                         Image(systemName: "bolt.fill")
                             .font(.system(size: 11))
                             .foregroundStyle(Color(.systemGreen))
-                        Text("340 XP")
+                        Text("\(viewModel.xpInLevel) XP")
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundStyle(Color(.systemGreen))
                     }
                     Spacer()
-                    Text("500 XP → Level 4")
-                        .font(.system(size: 12))
-                        .foregroundStyle(Color(.systemGreen))
+                    if viewModel.level < 5 {
+                        Text("\(viewModel.xpForNextLevel) XP → Level \(viewModel.level + 1)")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color(.systemGreen))
+                    } else {
+                        Text("Max Level! 👑")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color(.systemYellow))
+                    }
                 }
             }
         }
@@ -166,7 +227,7 @@ extension KidsHomeView {
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(.primary)
                     
-                    Text("3 new missions waiting! 🔥")
+                    Text("\(viewModel.activeMissionCount) missions waiting! 🔥")
                         .font(.system(size: 13))
                         .foregroundStyle(Color(.systemGray))
                     
@@ -174,7 +235,7 @@ extension KidsHomeView {
                         Image(systemName: "bolt.fill")
                             .font(.system(size: 10, weight: .bold))
                             .foregroundStyle(Color(.systemBlue))
-                        Text("total rewards: 33")
+                        Text("total rewards: \(viewModel.totalActiveReward)")
                             .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(Color(.systemBlue))
                     }
@@ -212,17 +273,24 @@ extension KidsHomeView {
         VStack(alignment: .leading, spacing: 12) {
             sectionLabel(title: "RECENT REWARDS")
             
-            VStack(spacing: 1) {
-                ForEach(KidsRewardTask.mock.filter { $0.isRecent }) { task in
-                    RewardRow(task: task)
+            if viewModel.recentTransactions.isEmpty {
+                Text("No recent rewards yet")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color(.systemGray))
+                    .padding(.horizontal, 16)
+            } else {
+                VStack(spacing: 1) {
+                    ForEach(viewModel.recentTransactions) { tx in
+                        TransactionRow(transaction: tx)
+                    }
                 }
+                .background(
+                    RoundedRectangle(cornerRadius: 18)
+                        .fill(Color(.systemGray6))
+                        .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 2)
+                )
+                .padding(.horizontal, 16)
             }
-            .background(
-                RoundedRectangle(cornerRadius: 18)
-                    .fill(Color(.systemGray6))
-                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 2)
-            )
-            .padding(.horizontal, 16)
         }
     }
     

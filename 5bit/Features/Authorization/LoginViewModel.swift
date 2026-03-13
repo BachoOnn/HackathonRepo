@@ -44,7 +44,7 @@ fileprivate extension LoginViewModel {
         
         do {
             let user = try await loginUseCase.execute(email: email, password: password)
-            coordinator?.login(as: user.role)
+            coordinator?.login(as: user.role, user: user)
         } catch {
             errorMessage = error.localizedDescription
         }

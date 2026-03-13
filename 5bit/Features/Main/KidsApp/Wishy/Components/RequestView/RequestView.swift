@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RequestView: View {
-    @StateObject var viewModel = RequestViewModel()
+    @StateObject var viewModel: RequestViewModel
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -30,9 +30,8 @@ struct RequestView: View {
                 }
             }
         }
+        .onChange(of: viewModel.didSendSuccessfully) { _, success in
+            if success { dismiss() }
+        }
     }
-}
-
-#Preview {
-    RequestView()
 }

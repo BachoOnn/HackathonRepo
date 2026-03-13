@@ -30,15 +30,14 @@ struct KidsWishyView: View {
             }
             .padding(.top, 20)
         }
-        .sheet(isPresented: $showRequestView) {
-            RequestView()
+        .sheet(isPresented: $showRequestView, onDismiss: {
+            viewModel.onLoad()
+        }) {
+            RequestView(viewModel: DIContainer.shared.makeRequestViewModel(childId: viewModel.childId))
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
                 .presentationCornerRadius(24)
         }
+        .task { viewModel.onLoad() }
     }
-}
-
-#Preview {
-    KidsWishyView(viewModel: KidsWishyViewModel())
 }

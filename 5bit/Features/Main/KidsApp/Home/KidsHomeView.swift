@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct KidsHomeView: View {
-    
     @StateObject var viewModel: KidsHomeViewModel
     
     var body: some View {
         ZStack {
             TBCBackground()
-            
             VStack(spacing: 20) {
                 headerSection
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 20) {
+                        cardSection
                         balanceCardSection
                         pocketQuestSection
                         achievementsSection
@@ -29,9 +28,7 @@ struct KidsHomeView: View {
             }
             .padding(.top, 20)
         }
+        .task { viewModel.onLoad() }
+        .refreshable { viewModel.onLoad() }
     }
-}
-
-#Preview {
-    KidsHomeView(viewModel: KidsHomeViewModel(coordinator: AppCoordinator()))
 }

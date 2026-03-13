@@ -14,7 +14,6 @@ struct ParentsWishyView: View {
     var body: some View {
         ZStack {
             TBCBackground()
-            
             VStack(spacing: 16) {
                 headerSection
                 ScrollView(showsIndicators: false) {
@@ -28,15 +27,18 @@ struct ParentsWishyView: View {
             }
             .padding(.top, 10)
         }
-        .sheet(isPresented: $showAddTask) {
-            AddTaskView()
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
-                .presentationCornerRadius(24)
+        .sheet(isPresented: $showAddTask, onDismiss: {
+            viewModel.onLoad()
+        }) {
+            AddTaskView(viewModel: DIContainer.shared.makeAddTaskViewModel(
+                parentId: viewModel.coordinator?.currentUser?.userId ?? 1,
+                kids: viewModel.kids
+            ))
+            .presentationDetents([.large])
+            .presentationDragIndicator(.visible)
+            .presentationCornerRadius(24)
         }
+        .task { viewModel.onLoad() }
+        .refreshable { viewModel.onLoad() }
     }
-}
-
-#Preview {
-    ParentsWishyView(viewModel: ParentWishyViewModel(coordinator: AppCoordinator()))
 }

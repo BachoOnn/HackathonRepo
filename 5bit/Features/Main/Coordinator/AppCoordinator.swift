@@ -11,8 +11,10 @@ import SwiftUI
 final class AppCoordinator: ObservableObject {
     @Published var userRole: UserRole? = nil
     @Published var path = NavigationPath()
-
-    func login(as role: UserRole) {
+    @Published var currentUser: User? = nil
+    
+    func login(as role: UserRole, user: User) {
+        currentUser = user
         userRole = role
     }
 
