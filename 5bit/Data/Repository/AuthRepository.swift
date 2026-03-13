@@ -15,7 +15,6 @@ final class AuthRepository: AuthRepositoryProtocol {
     init(network: NetworkManager = NetworkManager()) {
         self.network = network
         self.baseURL = Bundle.main.API_BASE_URL
-        print("🌐 baseURL: \(baseURL)")
     }
 
     func login(email: String, password: String) async throws -> User {

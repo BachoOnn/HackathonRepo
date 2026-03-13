@@ -50,19 +50,14 @@ final class ParentWishyViewModel: ObservableObject {
     
     func openSetPriceForAssignment(_ assignment: Assignment) {
         Task {
-            print("🔍 looking for wish — title: '\(assignment.taskTitle)', childId: \(assignment.childId)")
-            print("🔍 pendingWishes: \(pendingWishes.map { "\($0.id):\($0.title)" })")
-            
             if let match = pendingWishes.first(where: { $0.title == assignment.taskTitle }) {
-                print("✅ matched from pendingWishes — wishId: \(match.id)")
                 openSetPrice(for: match)
                 return
             }
             if let wishes = try? await getKidWishesUseCase.execute(childId: assignment.childId),
                let match = wishes.first(where: {
-                   $0.title == assignment.taskTitle && $0.status == .pendingPrice  // ← add status check
+                   $0.title == assignment.taskTitle && $0.status == .pendingPrice
                }) {
-                print("✅ matched from kidWishes — wishId: \(match.id)")
                 openSetPrice(for: match)
             } else {
                 print("❌ no match found or wish already priced")
@@ -197,11 +192,7 @@ fileprivate extension ParentWishyViewModel {
     func performSetPrice() async {
         guard let wish = selectedWish,
               let parentId = coordinator?.currentUser?.userId,
-              isWishPriceValid else {
-            print("❌ guard failed — wish: \(selectedWish?.id ?? -1), parentId: \(coordinator?.currentUser?.userId ?? -1), valid: \(isWishPriceValid)")
-            return
-        }
-        print("✅ submitting — wishId: \(wish.id), coinPrice: \(wishPriceInt), parentId: \(parentId)")
+              isWishPriceValid else { return }
         do {
             try await setWishPriceUseCase.execute(
                 wishId: wish.id,
@@ -212,7 +203,6 @@ fileprivate extension ParentWishyViewModel {
             selectedWish = nil
             await fetchAssignments()
         } catch {
-            print("❌ setWishPrice failed: \(error)")
             errorMessage = error.localizedDescription
         }
     }
