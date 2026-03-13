@@ -41,5 +41,10 @@ struct KidsWishyView: View {
                 .presentationCornerRadius(24)
         }
         .task { viewModel.onLoad() }
+        .alert("Not Enough Coins 🪙", isPresented: $viewModel.insufficientCoinsAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("You don't have enough coins to redeem this wish. Keep completing tasks to earn more! 💪")
+        }
     }
 }

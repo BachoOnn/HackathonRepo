@@ -17,6 +17,8 @@ final class KidsWishyViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     @Published var kidWishes: [Wish] = []
+    @Published var currentCoins: Int = 0
+    @Published var insufficientCoinsAlert: Bool = false
     
     // MARK: - Dependencies
     private weak var coordinator: AppCoordinator?
@@ -57,6 +59,11 @@ final class KidsWishyViewModel: ObservableObject {
     }
     
     func redeemWish(_ wish: Wish) {
+        guard let price = wish.coinPrice else { return }
+        if currentCoins < price {
+            insufficientCoinsAlert = true
+            return
+        }
         Task { await performRedeem(wish) }
     }
 }
@@ -69,10 +76,11 @@ fileprivate extension KidsWishyViewModel {
         
         do {
             let parentId = coordinator?.currentUser?.parentId
-            let (assignments, _, _) = try await getKidDataUseCase.execute(
+            let (assignments, balance, _) = try await getKidDataUseCase.execute(
                 childId: childId,
                 parentId: parentId
             )
+            currentCoins = balance.coins  // ← add this
             activeMissions = assignments.filter { !$0.isRewardGranted }
             completedMissions = assignments.filter { $0.isRewardGranted }
         } catch {
