@@ -1,0 +1,15 @@
+{
+  "originHash" : "f86abcf986ca595299b7dd6a51934700e2ede43f6d9e8719210837e216ba3dea",
+  "pins" : [
+    {
+      "identity" : "mynetworkmanager",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/BachoOnn/MyNetworkManager.git",
+      "state" : {
+        "revision" : "9d1b4f977e76774c6ee9a8ed87a6a4faeac37c4f",
+        "version" : "1.1.5"
+      }
+    }
+  ],
+  "version" : 3
+}

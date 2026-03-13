@@ -6,13 +6,30 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9DF606E32F642879007185E8 /* MyNetworkManager in Frameworks */ = {isa = PBXBuildFile; productRef = 9DF606E22F642879007185E8 /* MyNetworkManager */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		9D08BBEE2F62CFCC00861D2D /* 5bit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 5bit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9DF607192F642DCD007185E8 /* Exceptions for "5bit" folder in "5bit" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Resources/5bit/Resources/-bit-Info.plist",
+			);
+			target = 9D08BBED2F62CFCC00861D2D /* 5bit */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9DBF7A892F62D0CA00C997FD /* 5bit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9DF607192F642DCD007185E8 /* Exceptions for "5bit" folder in "5bit" target */,
+			);
 			path = 5bit;
 			sourceTree = "<group>";
 		};
@@ -23,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9DF606E32F642879007185E8 /* MyNetworkManager in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +83,7 @@
 			);
 			name = 5bit;
 			packageProductDependencies = (
+				9DF606E22F642879007185E8 /* MyNetworkManager */,
 			);
 			productName = 5bit;
 			productReference = 9D08BBEE2F62CFCC00861D2D /* 5bit.app */;
@@ -94,6 +113,9 @@
 			);
 			mainGroup = 9D08BBE52F62CFCC00861D2D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9DF606E12F642879007185E8 /* XCRemoteSwiftPackageReference "MyNetworkManager" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9D08BBEF2F62CFCC00861D2D /* Products */;
 			projectDirPath = "";
@@ -127,6 +149,8 @@
 /* Begin XCBuildConfiguration section */
 		9D08BBF72F62CFCD00861D2D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 9DBF7A892F62D0CA00C997FD /* 5bit */;
+			baseConfigurationReferenceRelativePath = Config/Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -190,6 +214,8 @@
 		};
 		9D08BBF82F62CFCD00861D2D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 9DBF7A892F62D0CA00C997FD /* 5bit */;
+			baseConfigurationReferenceRelativePath = Config/Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -246,6 +272,8 @@
 		};
 		9D08BBFA2F62CFCD00861D2D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 9DBF7A892F62D0CA00C997FD /* 5bit */;
+			baseConfigurationReferenceRelativePath = Config/Config.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -254,6 +282,7 @@
 				DEVELOPMENT_TEAM = 3NF6TUF42D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "5bit/Resources/-bit-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -278,6 +307,8 @@
 		};
 		9D08BBFB2F62CFCD00861D2D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 9DBF7A892F62D0CA00C997FD /* 5bit */;
+			baseConfigurationReferenceRelativePath = Config/Config.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -286,6 +317,7 @@
 				DEVELOPMENT_TEAM = 3NF6TUF42D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "5bit/Resources/-bit-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -330,6 +362,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9DF606E12F642879007185E8 /* XCRemoteSwiftPackageReference "MyNetworkManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/BachoOnn/MyNetworkManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9DF606E22F642879007185E8 /* MyNetworkManager */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9DF606E12F642879007185E8 /* XCRemoteSwiftPackageReference "MyNetworkManager" */;
+			productName = MyNetworkManager;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9D08BBE62F62CFCC00861D2D /* Project object */;
 }

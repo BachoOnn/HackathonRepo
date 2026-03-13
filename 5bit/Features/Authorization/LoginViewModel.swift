@@ -8,43 +8,47 @@
 import Combine
 import Foundation
 
+@MainActor
 final class LoginViewModel: ObservableObject {
+
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var isPasswordVisible: Bool = false
     @Published var errorMessage: String? = nil
+    @Published var isLoading: Bool = false
     
-    private let coordinator: AppCoordinator
+    private weak var coordinator: AppCoordinator?
+    private let loginUseCase: LogInUseCase
     
-    init(coordinator: AppCoordinator) {
+    init(coordinator: AppCoordinator, loginUseCase: LogInUseCase) {
         self.coordinator = coordinator
+        self.loginUseCase = loginUseCase
     }
     
     func login() {
-        guard !email.trimmingCharacters(in: .whitespaces).isEmpty else {
-            errorMessage = "Email is required."
-            return
+        Task {
+            await performLogin()
         }
-        guard isValidEmail(email) else {
-            errorMessage = "Enter a valid email address."
-            return
-        }
-        guard !password.isEmpty else {
-            errorMessage = "Password is required."
-            return
-        }
-        
-        errorMessage = nil
-        // TODO: get role from API response
-        coordinator.login(as: .kid)
     }
     
     func clearError() {
         errorMessage = nil
     }
+}
+
+fileprivate extension LoginViewModel {
     
-    private func isValidEmail(_ email: String) -> Bool {
-        let regex = #"^[A-Z0-9a-z._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$"#
-        return email.range(of: regex, options: .regularExpression) != nil
+    func performLogin() async {
+        isLoading = true
+        errorMessage = nil
+        
+        do {
+            let user = try await loginUseCase.execute(email: email, password: password)
+            coordinator?.login(as: user.role)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        
+        isLoading = false
     }
 }

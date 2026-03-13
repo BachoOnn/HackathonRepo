@@ -10,22 +10,24 @@ import SwiftUI
 struct RootView: View {
     @StateObject var coordinator = AppCoordinator()
     
+    private let di = DIContainer.shared
+    
     var body: some View {
         Group {
             switch coordinator.userRole {
             case .none:
-                LoginView(viewModel: LoginViewModel(coordinator: coordinator))
+                LoginView(viewModel: di.makeLoginViewModel(coordinator: coordinator))
             case .parent:
                 NavigationStack(path: $coordinator.path) {
-                    ParentHomeView(viewModel: ParentHomeViewModel(coordinator: coordinator))
+                    ParentHomeView(viewModel: di.makeParentHomeViewModel(coordinator: coordinator))
                         .navigationBarHidden(true)
                         .navigationDestination(for: AppRoute.self) { route in
                             destination(for: route)
                         }
                 }
-            case .kid:
+            case .child:
                 NavigationStack(path: $coordinator.path) {
-                    KidsHomeView(viewModel: KidsHomeViewModel(coordinator: coordinator))
+                    KidsHomeView(viewModel: di.makeKidsHomeViewModel(coordinator: coordinator))
                         .navigationBarHidden(true)
                         .navigationDestination(for: AppRoute.self) { route in
                             destination(for: route)
@@ -39,9 +41,9 @@ struct RootView: View {
     private func destination(for route: AppRoute) -> some View {
         switch route {
         case .parentWishy:
-            ParentsWishyView(viewModel: ParentWishyViewModel(coordinator: coordinator))
+            ParentsWishyView(viewModel: di.makeParentWishyViewModel(coordinator: coordinator))
         case .kidsWishy:
-            KidsWishyView(viewModel: KidsWishyViewModel())
+            KidsWishyView(viewModel: di.makeKidsWishyViewModel())
         }
     }
 }

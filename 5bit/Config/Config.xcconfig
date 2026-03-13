@@ -6,4 +6,4 @@
 //
 
 // API Base URL
-API_BASE_URL = d27docblf678gf.cloudfront.net
+API_BASE_URL = https:/$()/d27docblf678gf.cloudfront.net

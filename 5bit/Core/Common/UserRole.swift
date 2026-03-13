@@ -10,5 +10,5 @@ import Foundation
 
 enum UserRole: String {
     case parent
-    case kid
+    case child
 }
