@@ -33,6 +33,7 @@ final class DIContainer {
     lazy var completeTaskUseCase: CompleteTaskUseCase = DefaultCompleteTaskUseCase(kidRepository: kidRepository)
     lazy var createWishUseCase: CreateWishUseCase = DefaultCreateWishUseCase(kidRepository: kidRepository)
     lazy var approveTaskUseCase: ApproveTaskUseCase = DefaultApproveTaskUseCase(taskRepository: taskRepository)
+    lazy var convertCoinsUseCase: ConvertCoinsUseCase = DefaultConvertCoinsUseCase(kidRepository: kidRepository)
     
     // MARK: - ViewModels
     func makeLoginViewModel(coordinator: AppCoordinator) -> LoginViewModel {
@@ -62,7 +63,11 @@ final class DIContainer {
     }
     
     func makeKidsHomeViewModel(coordinator: AppCoordinator) -> KidsHomeViewModel {
-        KidsHomeViewModel(coordinator: coordinator, getKidDataUseCase: getKidDataUseCase)
+        KidsHomeViewModel(
+            coordinator: coordinator,
+            getKidDataUseCase: getKidDataUseCase,
+            convertCoinsUseCase: convertCoinsUseCase
+        )
     }
     
     func makeKidsWishyViewModel(coordinator: AppCoordinator) -> KidsWishyViewModel {

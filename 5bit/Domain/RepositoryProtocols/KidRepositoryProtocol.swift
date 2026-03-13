@@ -14,4 +14,5 @@ protocol KidRepositoryProtocol {
     func getTransactionHistory(childId: Int) async throws -> [Transaction]
     func createWish(childId: Int, title: String, description: String?) async throws -> Wish
     func getWishes(childId: Int) async throws -> [Wish]
+    func convertCoins(childId: Int, amount: Int) async throws -> KidBalance
 }

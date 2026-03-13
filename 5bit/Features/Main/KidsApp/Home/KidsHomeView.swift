@@ -17,7 +17,7 @@ struct KidsHomeView: View {
                 headerSection
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 20) {
-                        cardSection
+                        cardSection         
                         balanceCardSection
                         missionSection
                         achievementsSection
@@ -29,6 +29,11 @@ struct KidsHomeView: View {
             .padding(.top, 20)
         }
         .task { viewModel.onLoad() }
-        .refreshable { viewModel.onLoad() }
+        .sheet(isPresented: $viewModel.showConvertSheet) {
+            ConvertCoinsView(viewModel: viewModel)
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(24)
+        }
     }
 }

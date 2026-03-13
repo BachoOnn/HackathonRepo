@@ -84,6 +84,15 @@ final class KidRepository: KidRepositoryProtocol {
         )
         return dtos.map { $0.toDomain() }
     }
+    
+    func convertCoins(childId: Int, amount: Int) async throws -> KidBalance {
+        struct ConvertRequest: Codable { let childId: Int; let coins: Int } 
+        let dto: BalanceResponseDTO = try await network.post(
+            urlString: baseURL + "/coins/convert",
+            body: ConvertRequest(childId: childId, coins: amount)
+        )
+        return KidBalance(coins: dto.coinBalance, money: dto.moneyBalance)
+    }
 }
 
 extension WishResponseDTO {

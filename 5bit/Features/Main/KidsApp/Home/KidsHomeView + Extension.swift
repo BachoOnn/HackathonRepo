@@ -100,7 +100,14 @@ extension KidsHomeView {
                     }
                     
                     Spacer()
-                    AmountView(amount: "\(viewModel.balance.money)")
+                    
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        Text(String(format: "%.2f", viewModel.balance.money))
+                            .font(.system(size: 16, weight: .bold))
+                        Text("₾")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(Color(.systemGray))
+                    }
                 }
             }
         }
@@ -128,6 +135,25 @@ extension KidsHomeView {
                         Image("coin")
                             .resizable()
                             .frame(width: 30, height: 30)
+                        
+                        Button {
+                            viewModel.showConvertSheet = true
+                        } label: {
+                            HStack(spacing: 5) {
+                                Image(systemName: "arrow.left.arrow.right")
+                                    .font(.system(size: 11, weight: .bold))
+                                Text("Convert")
+                                    .font(.system(size: 12, weight: .semibold))
+                            }
+                            .foregroundStyle(Color(.systemGreen))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(
+                                Capsule()
+                                    .strokeBorder(Color(.systemGreen).opacity(0.6), lineWidth: 1)
+                                    .background(Capsule().fill(Color(.systemGreen).opacity(0.15)))
+                            )
+                        }
                     }
                 }
                 
