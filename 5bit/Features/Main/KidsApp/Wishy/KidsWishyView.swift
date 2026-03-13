@@ -41,6 +41,7 @@ struct KidsWishyView: View {
                 .presentationCornerRadius(24)
         }
         .task { viewModel.onLoad() }
+        .refreshable { viewModel.onLoad() }
         .alert("Not Enough Coins 🪙", isPresented: $viewModel.insufficientCoinsAlert) {
             Button("OK", role: .cancel) { }
         } message: {

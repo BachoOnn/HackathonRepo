@@ -50,16 +50,26 @@ final class ParentWishyViewModel: ObservableObject {
     
     func openSetPriceForAssignment(_ assignment: Assignment) {
         Task {
+            print("🔍 looking for wish — title: '\(assignment.taskTitle)', childId: \(assignment.childId)")
+            print("🔍 pendingWishes: \(pendingWishes.map { "\($0.id):\($0.title)" })")
+            
             if let match = pendingWishes.first(where: { $0.title == assignment.taskTitle }) {
+                print("✅ matched from pendingWishes — wishId: \(match.id)")
                 openSetPrice(for: match)
                 return
             }
             if let wishes = try? await getKidWishesUseCase.execute(childId: assignment.childId),
-               let match = wishes.first(where: { $0.title == assignment.taskTitle }) {
+               let match = wishes.first(where: {
+                   $0.title == assignment.taskTitle && $0.status == .pendingPrice  // ← add status check
+               }) {
+                print("✅ matched from kidWishes — wishId: \(match.id)")
                 openSetPrice(for: match)
+            } else {
+                print("❌ no match found or wish already priced")
             }
         }
     }
+    
     var filteredAssignments: [Assignment] {
         assignments.filter {
             $0.childId == selectedKid.apiId &&
